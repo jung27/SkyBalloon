@@ -54,7 +54,7 @@ function update() {
   animation = requestAnimationFrame(update);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (timer % 5 === 0) {
+  if (timer % 100 === 0) {
     var arrow = new Arrow();
     arrows.push(arrow);
   }
