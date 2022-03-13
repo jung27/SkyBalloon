@@ -109,7 +109,7 @@ function update() {
       ctx.font = "70px Fira";
       ctx.fillStyle = "lime";
       ctx.fillText("press space key to replay", 900, 775);
-      ctx.strokeText();
+      ctx.strokeText("press space key to replay", 900, 775);
       over = true;
       arrows.length = 0;
       balloon.x = 100;
