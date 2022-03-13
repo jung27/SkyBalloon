@@ -85,7 +85,7 @@ function update() {
   balloon.y += Math.sin(timer / 20);
   balloon.draw();
 
-  ctx.font = "40px";
+  ctx.font = "40px Firacode";
   ctx.fillText("Score: " + score, 100, 100);
 
   timer++;
