@@ -107,6 +107,7 @@ function update() {
       ctx.fillText("final score: " + score, 900, 400);
       ctx.fillText("highest score: " + hscore, 900, 475);
       ctx.font = "70px Fira";
+      ctx.fillStyle = "lime";
       ctx.fillText("press space key to replay", 900, 775);
       over = true;
       arrows.length = 0;
