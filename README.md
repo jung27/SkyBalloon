@@ -1,4 +1,4 @@
-# SkyBalloon
+# Sky Balloon
 The game where a balloon avoid arrows
 
 This is just test site.
