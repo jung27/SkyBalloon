@@ -48,6 +48,7 @@ var ispressA = false;
 var ispressD = false;
 var arrows = [];
 var animation;
+var score = 0;
 
 function update() {
   animation = requestAnimationFrame(update);
@@ -56,6 +57,9 @@ function update() {
   if (timer % 5 === 0) {
     var arrow = new Arrow();
     arrows.push(arrow);
+  }
+  if (timer % 7 === 0) {
+    score++;
   }
   arrows.forEach((a) => {
     if (distance(balloon, a) < balloon.radius) {
