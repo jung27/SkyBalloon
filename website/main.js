@@ -49,26 +49,21 @@ var ispressD = false;
 var arrows = [];
 var animation;
 var score = 0;
+var over = false;
+var hscore = 0;
 
 function update() {
   animation = requestAnimationFrame(update);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (timer % 100 === 0) {
+  if (timer % 5 === 0) {
     var arrow = new Arrow();
     arrows.push(arrow);
   }
   if (timer % 7 === 0) {
     score++;
   }
-  arrows.forEach((a) => {
-    if (distance(balloon, a) < balloon.radius) {
-      cancelAnimationFrame(animation);
-    }
 
-    a.y -= 10;
-    a.draw();
-  });
   arrows.forEach((a, i, o) => {
     if (a.y < 0) {
       o.splice(i, 1);
@@ -85,11 +80,41 @@ function update() {
   balloon.y += Math.sin(timer / 20);
   balloon.draw();
 
-  ctx.font = "40px Firacode";
-  ctx.fillText("Score: " + score, 100, 100);
+  ctx.fillStyle = "black";
+  ctx.font = "40px Fira";
+  ctx.fillText("Score: " + score, 1600, 50);
 
   timer++;
   balloon.dx = 0;
+
+  arrows.forEach((a) => {
+    a.y -= 10;
+    a.draw();
+  });
+  arrows.forEach((a) => {
+    if (distance(balloon, a) < balloon.radius) {
+      cancelAnimationFrame(animation);
+      if (score > hscore) {
+        console.log("asd");
+        hscore = score;
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "black";
+      ctx.textAlign = "center";
+      ctx.font = "100px Fira";
+      ctx.fillText("GAME OVER", 900, 300);
+      ctx.font = "50px Fira";
+      ctx.fillText("final score: " + score, 900, 400);
+      ctx.fillText("highest score: " + hscore, 900, 475);
+      ctx.font = "70px Fira";
+      ctx.fillText("press space key to replay", 900, 775);
+      over = true;
+      arrows.length = 0;
+      balloon.x = 100;
+      score = 0;
+      timer = 0;
+    }
+  });
 }
 update();
 
@@ -112,5 +137,9 @@ document.addEventListener("keydown", (e) => {
   }
   if (e.code === "KeyD") {
     ispressD = true;
+  }
+  if (e.code === "Space" && over) {
+    update();
+    over = false;
   }
 });
