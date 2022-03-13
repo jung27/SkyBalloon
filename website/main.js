@@ -85,6 +85,8 @@ function update() {
   balloon.y += Math.sin(timer / 20);
   balloon.draw();
 
+  ctx.fillText("Score: " + score, 100, 100);
+
   timer++;
   balloon.dx = 0;
 }
