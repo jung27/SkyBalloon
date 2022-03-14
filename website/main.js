@@ -7,7 +7,7 @@ canvas.width = window.innerWidth - 20;
 var arrowrange = 800;
 
 var balloon = {
-  x: window.innerWidth / 2,
+  x: canvas.width / 2,
   y: 100,
   dx: 0,
   radius: 50,
@@ -86,7 +86,7 @@ function update() {
   if (ispressA && balloon.x - 3 > balloon.radius) {
     balloon.dx -= 3;
   }
-  if (ispressD && balloon.x + 3 < window.innerWidth - balloon.radius) {
+  if (ispressD && balloon.x + 3 < canvas.width - balloon.radius) {
     balloon.dx += 3;
   }
   balloon.x += balloon.dx;
@@ -103,8 +103,9 @@ function update() {
   });
 
   ctx.fillStyle = "black";
+  ctx.textAlign = "right";
   ctx.font = "40px DungGeunMo";
-  ctx.fillText("Score: " + score, window.innerWidth - 300, 50);
+  ctx.fillText("Score: " + score, canvas.width, 40);
 
   arrows.forEach((a) => {
     if (distance(balloon, a) < balloon.radius) {
@@ -127,7 +128,8 @@ function update() {
       ctx.strokeText("press space key to replay", 900, 775);
       over = true;
       arrows.length = 0;
-      balloon.x = window.innerWidth / 2;
+      balloon.x = canvas.width / 2;
+      balloon.y = 100;
       score = 0;
       timer = 0;
       shoot = 50;
