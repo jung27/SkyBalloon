@@ -48,37 +48,85 @@ class Arrow {
   }
 }
 
+var img2 = new Image();
+img2.src = "follow.png";
+
+class Follow {
+  constructor() {
+    this.x = Math.abs(
+      Math.floor(Math.random() * arrowrange) + balloon.x - arrowrange / 2
+    );
+    this.y = canvas.height;
+    this.width = 39;
+    this.height = 46;
+    this.follow = 120;
+    this.arc = 0;
+    this.more = false;
+  }
+  draw() {
+    // ctx.fillStyle = "green";
+    // ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.save();
+    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    if (this.ismore) {
+      ctx.rotate(this.arc - Math.PI / 2);
+    } else {
+      ctx.rotate(-this.arc + Math.PI / 2);
+    }
+    ctx.translate(-this.x - this.width / 2, -this.y - this.height / 2);
+    ctx.drawImage(img2, this.x, this.y, this.width, this.height);
+    ctx.restore();
+  }
+}
+
 var timer = 0;
 var repeat = 0;
+var frepeat = 0;
 var ispressA = false;
 var ispressD = false;
 var arrows = [];
+var follows = [];
+var pjs = [];
 var animation;
 var score = 0;
 var over = false;
 var hscore = 0;
-var shoot = 50;
+var ashoot = 100;
+var fshoot = 500;
 
 function update() {
   animation = requestAnimationFrame(update);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (repeat >= shoot) {
+  if (repeat >= ashoot) {
     var arrow = new Arrow();
     arrows.push(arrow);
+    pjs.push(arrow);
     repeat = 0;
   }
 
-  if (timer % 50 === 0 && shoot !== 10) {
-    shoot--;
+  if (frepeat >= fshoot) {
+    var follow = new Follow();
+    follows.push(follow);
+    pjs.push(follow);
+    frepeat = 0;
+  }
+
+  if (timer % 50 === 0 && ashoot !== 15) {
+    ashoot--;
   }
 
   if (timer % 7 === 0) {
     score++;
   }
 
+  follows.forEach((a, i, o) => {
+    if (a.y < -50) {
+      o.splice(i, 1);
+    }
+  });
   arrows.forEach((a, i, o) => {
-    if (a.y < 0) {
+    if (a.y < -50) {
       o.splice(i, 1);
     }
   });
@@ -95,6 +143,7 @@ function update() {
 
   timer++;
   repeat++;
+  frepeat++;
   balloon.dx = 0;
 
   arrows.forEach((a) => {
@@ -102,12 +151,43 @@ function update() {
     a.draw();
   });
 
+  follows.forEach((a) => {
+    if (a.follow > 0) {
+      const ry = Math.abs(a.y - balloon.y);
+      const r = distance(balloon, a);
+      const arc = Math.asin(ry / r);
+      a.ismore = false;
+      if (a.y > balloon.y) {
+        a.y -= Math.sin(arc) * 3;
+      } else {
+        a.y += Math.sin(arc) * 3;
+      }
+      if (a.x > balloon.x) {
+        a.x -= Math.cos(arc) * 3;
+        a.ismore = true;
+      } else {
+        a.x += Math.cos(arc) * 3;
+      }
+      a.arc = arc;
+      a.follow--;
+      a.draw();
+    } else {
+      a.y -= Math.sin(a.arc) * 3;
+      if (a.ismore) {
+        a.x -= Math.cos(a.arc) * 3;
+      } else {
+        a.x += Math.cos(a.arc) * 3;
+      }
+      a.draw();
+    }
+  });
+
   ctx.fillStyle = "black";
   ctx.textAlign = "right";
   ctx.font = "40px DungGeunMo";
   ctx.fillText("Score: " + score, canvas.width, 40);
 
-  arrows.forEach((a) => {
+  pjs.forEach((a) => {
     if (distance(balloon, a) < balloon.radius) {
       cancelAnimationFrame(animation);
       if (score > hscore) {
@@ -132,8 +212,11 @@ function update() {
       balloon.y = 100;
       score = 0;
       timer = 0;
-      shoot = 50;
+      ashoot = 100;
       repeat = 0;
+      frepeat = 0;
+      follows.length = 0;
+      pjs.length = 0;
     }
   });
 }
