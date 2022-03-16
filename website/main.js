@@ -57,7 +57,6 @@ class Follow {
     this.y = canvas.height;
     this.width = 39;
     this.height = 46;
-    this.follow = 120;
     this.arc = 0;
     this.more = false;
   }
@@ -78,53 +77,51 @@ class Follow {
 }
 
 var timer = 0;
-var repeat = 0;
-var frepeat = 0;
 var ispressA = false;
 var ispressD = false;
 var pjs = new Map();
 pjs.set("arrow", []);
 pjs.set("follow", []);
+var cool = new Map();
+cool.set("arrow", [0, 0, 100, Arrow]);
+cool.set("follow", [2100, 0, 500, Follow]);
 var animation;
 var score = 0;
 var over = false;
 var hscore = 0;
-var ashoot = 100;
-var fshoot = 500;
 
 function update() {
   animation = requestAnimationFrame(update);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (repeat >= ashoot) {
-    var arrow = new Arrow();
-    pjs.get("arrow").push(arrow);
-    repeat = 0;
-  }
+  cool.forEach((v, k) => {
+    if (timer > v[0])
+      if (v[1] >= v[2]) {
+        var p = new v[3]();
+        pjs.get(k).push(p);
+        v[1] = 0;
+      } else {
+        v[1]++;
+      }
+    if (timer % 35 === 0 && cool.get("follow")[2] !== 100) {
+      cool.get("follow")[2]--;
+    }
+  });
 
-  if (frepeat >= fshoot) {
-    var follow = new Follow();
-    pjs.get("follow").push(follow);
-    frepeat = 0;
-  }
-
-  if (timer % 50 === 0 && ashoot !== 15) {
-    ashoot--;
+  if (timer % 50 === 0 && cool.get("arrow")[2] !== 15) {
+    cool.get("arrow")[2]--;
   }
 
   if (timer % 7 === 0) {
     score++;
   }
 
-  pjs.get("follow").forEach((a, i, o) => {
-    if (a.y < -50) {
-      o.splice(i, 1);
-    }
-  });
-  pjs.get("arrow").forEach((a, i, o) => {
-    if (a.y < -50) {
-      o.splice(i, 1);
-    }
+  pjs.forEach((v) => {
+    v.forEach((a, i, o) => {
+      if (a.y < -50) {
+        o.splice(i, 1);
+      }
+    });
   });
 
   if (ispressA && balloon.x - 3 > balloon.radius) {
@@ -138,8 +135,6 @@ function update() {
   balloon.draw();
 
   timer++;
-  repeat++;
-  frepeat++;
   balloon.dx = 0;
 
   pjs.get("arrow").forEach((a) => {
@@ -148,7 +143,7 @@ function update() {
   });
 
   pjs.get("follow").forEach((a) => {
-    if (a.follow > 0) {
+    if (a.y > canvas.height / 2) {
       const ry = Math.abs(a.y - balloon.y);
       const r = distance(balloon, a);
       const arc = Math.asin(ry / r);
@@ -204,16 +199,18 @@ function update() {
         ctx.strokeStyle = "green";
         ctx.strokeText("press space key to replay", canvas.width / 2, 775);
         over = true;
-        pjs.get("arrow").length = 0;
+        cool.forEach((v) => {
+          v.length = 0;
+        });
+        cool.set("arrow", [0, 0, 100, Arrow]);
+        cool.set("follow", [2100, 0, 500, Follow]);
+        pjs.forEach((v) => {
+          v.length = 0;
+        });
         balloon.x = canvas.width / 2;
         balloon.y = 100;
         score = 0;
         timer = 0;
-        ashoot = 100;
-        repeat = 0;
-        frepeat = 0;
-        pjs.get("follow").length = 0;
-        pjs.length = 0;
       }
     });
   });
