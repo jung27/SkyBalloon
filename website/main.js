@@ -53,9 +53,7 @@ img2.src = "follow.png";
 
 class Follow {
   constructor() {
-    this.x = Math.abs(
-      Math.floor(Math.random() * arrowrange) + balloon.x - arrowrange / 2
-    );
+    this.x = Math.floor(Math.random() * canvas.width);
     this.y = canvas.height;
     this.width = 39;
     this.height = 46;
@@ -197,15 +195,15 @@ function update() {
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
       ctx.font = "100px DungGeunMo";
-      ctx.fillText("GAME OVER", 900, 300);
+      ctx.fillText("GAME OVER", canvas.width / 2, 300);
       ctx.font = "50px DungGeunMo";
-      ctx.fillText("final score: " + score, 900, 400);
-      ctx.fillText("highest score: " + hscore, 900, 475);
+      ctx.fillText("final score: " + score, canvas.width / 2, 400);
+      ctx.fillText("highest score: " + hscore, canvas.width / 2, 475);
       ctx.font = "70px DungGeunMo";
       ctx.fillStyle = "lime";
-      ctx.fillText("press space key to replay", 900, 775);
+      ctx.fillText("press space key to replay", canvas.width / 2, 775);
       ctx.strokeStyle = "green";
-      ctx.strokeText("press space key to replay", 900, 775);
+      ctx.strokeText("press space key to replay", canvas.width / 2, 775);
       over = true;
       arrows.length = 0;
       balloon.x = canvas.width / 2;
@@ -247,3 +245,47 @@ document.addEventListener("keydown", (e) => {
     over = false;
   }
 });
+
+document.addEventListener("touchend", (e) => {
+  const x = e.changedTouches[0].clientX;
+  if (x < canvas.width / 2) {
+    ispressA = false;
+  }
+  if (x > canvas.width / 2) {
+    ispressD = false;
+  }
+});
+
+document.addEventListener("touchstart", (e) => {
+  const x = e.changedTouches[0].clientX;
+  if (x < canvas.width / 2) {
+    ispressA = true;
+  }
+  if (x > canvas.width / 2) {
+    ispressD = true;
+  }
+  if (over) {
+    update();
+    over = false;
+  }
+});
+
+function checkMobileDevice() {
+  var mobileKeyWords = new Array(
+    "Android",
+    "iPhone",
+    "iPod",
+    "BlackBerry",
+    "Windows CE",
+    "SAMSUNG",
+    "LG",
+    "MOT",
+    "SonyEricsson"
+  );
+  for (var info in mobileKeyWords) {
+    if (navigator.userAgent.match(mobileKeyWords[info]) != null) {
+      return true;
+    }
+  }
+  return false;
+}
