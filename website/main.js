@@ -82,9 +82,9 @@ var repeat = 0;
 var frepeat = 0;
 var ispressA = false;
 var ispressD = false;
-var arrows = [];
-var follows = [];
-var pjs = [];
+var pjs = new Map();
+pjs.set("arrow", []);
+pjs.set("follow", []);
 var animation;
 var score = 0;
 var over = false;
@@ -98,15 +98,13 @@ function update() {
 
   if (repeat >= ashoot) {
     var arrow = new Arrow();
-    arrows.push(arrow);
-    pjs.push(arrow);
+    pjs.get("arrow").push(arrow);
     repeat = 0;
   }
 
   if (frepeat >= fshoot) {
     var follow = new Follow();
-    follows.push(follow);
-    pjs.push(follow);
+    pjs.get("follow").push(follow);
     frepeat = 0;
   }
 
@@ -118,12 +116,12 @@ function update() {
     score++;
   }
 
-  follows.forEach((a, i, o) => {
+  pjs.get("follow").forEach((a, i, o) => {
     if (a.y < -50) {
       o.splice(i, 1);
     }
   });
-  arrows.forEach((a, i, o) => {
+  pjs.get("arrow").forEach((a, i, o) => {
     if (a.y < -50) {
       o.splice(i, 1);
     }
@@ -144,12 +142,12 @@ function update() {
   frepeat++;
   balloon.dx = 0;
 
-  arrows.forEach((a) => {
+  pjs.get("arrow").forEach((a) => {
     a.y -= 10;
     a.draw();
   });
 
-  follows.forEach((a) => {
+  pjs.get("follow").forEach((a) => {
     if (a.follow > 0) {
       const ry = Math.abs(a.y - balloon.y);
       const r = distance(balloon, a);
@@ -185,37 +183,39 @@ function update() {
   ctx.font = "40px DungGeunMo";
   ctx.fillText("Score: " + score, canvas.width, 40);
 
-  pjs.forEach((a) => {
-    if (distance(balloon, a) < balloon.radius) {
-      cancelAnimationFrame(animation);
-      if (score > hscore) {
-        hscore = score;
+  pjs.forEach((v) => {
+    v.forEach((a) => {
+      if (distance(balloon, a) < balloon.radius) {
+        cancelAnimationFrame(animation);
+        if (score > hscore) {
+          hscore = score;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.font = "100px DungGeunMo";
+        ctx.fillText("GAME OVER", canvas.width / 2, 300);
+        ctx.font = "50px DungGeunMo";
+        ctx.fillText("final score: " + score, canvas.width / 2, 400);
+        ctx.fillText("highest score: " + hscore, canvas.width / 2, 475);
+        ctx.font = "70px DungGeunMo";
+        ctx.fillStyle = "lime";
+        ctx.fillText("press space key to replay", canvas.width / 2, 775);
+        ctx.strokeStyle = "green";
+        ctx.strokeText("press space key to replay", canvas.width / 2, 775);
+        over = true;
+        pjs.get("arrow").length = 0;
+        balloon.x = canvas.width / 2;
+        balloon.y = 100;
+        score = 0;
+        timer = 0;
+        ashoot = 100;
+        repeat = 0;
+        frepeat = 0;
+        pjs.get("follow").length = 0;
+        pjs.length = 0;
       }
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "black";
-      ctx.textAlign = "center";
-      ctx.font = "100px DungGeunMo";
-      ctx.fillText("GAME OVER", canvas.width / 2, 300);
-      ctx.font = "50px DungGeunMo";
-      ctx.fillText("final score: " + score, canvas.width / 2, 400);
-      ctx.fillText("highest score: " + hscore, canvas.width / 2, 475);
-      ctx.font = "70px DungGeunMo";
-      ctx.fillStyle = "lime";
-      ctx.fillText("press space key to replay", canvas.width / 2, 775);
-      ctx.strokeStyle = "green";
-      ctx.strokeText("press space key to replay", canvas.width / 2, 775);
-      over = true;
-      arrows.length = 0;
-      balloon.x = canvas.width / 2;
-      balloon.y = 100;
-      score = 0;
-      timer = 0;
-      ashoot = 100;
-      repeat = 0;
-      frepeat = 0;
-      follows.length = 0;
-      pjs.length = 0;
-    }
+    });
   });
 }
 update();
