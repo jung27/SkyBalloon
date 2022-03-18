@@ -232,6 +232,7 @@ function update() {
         });
         cool.set("arrow", [0, 0, 100, Arrow]);
         cool.set("follow", [2100, 0, 500, Follow]);
+        cool.set("wind", [0, 0, 1750, Wind]);
         pjs.forEach((v) => {
           v.length = 0;
         });
