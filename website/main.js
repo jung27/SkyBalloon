@@ -177,7 +177,11 @@ function update() {
   });
 
   pjs.get("wind").forEach((a) => {
-    a.x -= 5;
+    if(a.dir){
+      a.x -= 5;
+    } else{
+      a.x += 5;
+    }
     a.draw();
   });
 
