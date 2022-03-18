@@ -108,7 +108,7 @@ pjs.set("wind", []);
 let cool = new Map();
 cool.set("arrow", [0, 0, 100, Arrow]);
 cool.set("follow", [2000, 0, 500, Follow]);
-cool.set("wind", [0, 0, 1750, Wind]);
+cool.set("wind", [0, 0, 1400, Wind]);
 let animation;
 let score = 0;
 let over = false;
