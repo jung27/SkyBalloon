@@ -1,12 +1,12 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
 canvas.height = window.innerHeight - 20;
 canvas.width = window.innerWidth - 20;
 
-var arrowrange = 800;
+const arrowrange = canvas.width / 2;
 
-var balloon = {
+const balloon = {
   x: canvas.width / 2,
   y: 100,
   dx: 0,
@@ -29,7 +29,7 @@ var balloon = {
   },
 };
 
-var img1 = new Image();
+const img1 = new Image();
 img1.src = "arrow.png";
 
 class Arrow {
@@ -48,7 +48,7 @@ class Arrow {
   }
 }
 
-var img2 = new Image();
+const img2 = new Image();
 img2.src = "follow.png";
 
 class Follow {
@@ -64,7 +64,7 @@ class Follow {
     // ctx.fillStyle = "green";
     // ctx.fillRect(this.x, this.y, this.width, this.height);
     ctx.save();
-    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.translate(this.x + this.width / 2, this.y - this.height / 2);
     if (this.ismore) {
       ctx.rotate(this.arc - Math.PI / 2);
     } else {
@@ -76,19 +76,36 @@ class Follow {
   }
 }
 
-var timer = 0;
-var ispressA = false;
-var ispressD = false;
-var pjs = new Map();
+const img3 = new Image();
+img3.src = "wind.png";
+
+class Wind {
+  constructor() {
+    this.x = canvas.width;
+    this.y = 0;
+    this.width = 256;
+    this.height = 128;
+  }
+  draw() {
+    ctx.drawImage(img3, this.x, this.y, this.width * 5, this.height * 5);
+  }
+}
+
+let timer = 0;
+let ispressA = false;
+let ispressD = false;
+let pjs = new Map();
 pjs.set("arrow", []);
 pjs.set("follow", []);
-var cool = new Map();
+pjs.set("wind", []);
+let cool = new Map();
 cool.set("arrow", [0, 0, 100, Arrow]);
-cool.set("follow", [2100, 0, 500, Follow]);
-var animation;
-var score = 0;
-var over = false;
-var hscore = 0;
+cool.set("follow", [2000, 0, 500, Follow]);
+cool.set("wind", [0, 0, 1750, Wind]);
+let animation;
+let score = 0;
+let over = false;
+let hscore = 0;
 
 function update() {
   animation = requestAnimationFrame(update);
@@ -108,12 +125,8 @@ function update() {
     }
   });
 
-  if (timer % 50 === 0 && cool.get("arrow")[2] !== 15) {
+  if (timer % 50 === 0 && cool.get("arrow")[2] !== 30) {
     cool.get("arrow")[2]--;
-  }
-
-  if (timer % 7 === 0) {
-    score++;
   }
 
   pjs.forEach((v) => {
@@ -130,6 +143,16 @@ function update() {
   if (ispressD && balloon.x + 3 < canvas.width - balloon.radius) {
     balloon.dx += 3;
   }
+  pjs.get("wind").forEach((a) => {
+    if (balloon.x > a.x && balloon.x < a.x + a.width * 5) {
+      balloon.dx -= 2;
+    }
+  });
+
+  if (timer % 7 === 0) {
+    score++;
+  }
+
   balloon.x += balloon.dx;
   balloon.y += Math.sin(timer / 20);
   balloon.draw();
@@ -139,6 +162,11 @@ function update() {
 
   pjs.get("arrow").forEach((a) => {
     a.y -= 10;
+    a.draw();
+  });
+
+  pjs.get("wind").forEach((a) => {
+    a.x -= 5;
     a.draw();
   });
 
@@ -178,9 +206,9 @@ function update() {
   ctx.font = "40px DungGeunMo";
   ctx.fillText("Score: " + score, canvas.width, 40);
 
-  pjs.forEach((v) => {
+  pjs.forEach((v, k) => {
     v.forEach((a) => {
-      if (distance(balloon, a) < balloon.radius) {
+      if (distance(balloon, a) < balloon.radius && k != "wind") {
         cancelAnimationFrame(animation);
         if (score > hscore) {
           hscore = score;
