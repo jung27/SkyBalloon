@@ -85,6 +85,13 @@ class Wind {
     this.y = 0;
     this.width = 256;
     this.height = 128;
+    const r = Math.random();
+    this.dir = true;
+    if (r > 0.5){
+      this.x = -this.width;
+    } else{
+      this.dir = false;
+    }
   }
   draw() {
     ctx.drawImage(img3, this.x, this.y, this.width * 5, this.height * 5);
@@ -145,7 +152,11 @@ function update() {
   }
   pjs.get("wind").forEach((a) => {
     if (balloon.x > a.x && balloon.x < a.x + a.width * 5) {
-      balloon.dx -= 2;
+      if(a.dir){
+        balloon.dx += 2;
+      } else{
+        balloon.dx -= 2;
+      }
     }
   });
 
