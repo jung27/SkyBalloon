@@ -88,7 +88,7 @@ class Wind {
     const r = Math.random();
     this.dir = true;
     if (r > 0.5){
-      this.x = -this.width;
+      this.x = -this.width*5;
     } else{
       this.dir = false;
     }
