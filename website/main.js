@@ -163,8 +163,10 @@ function update() {
   if (timer % 7 === 0) {
     score++;
   }
-
-  balloon.x += balloon.dx;
+   
+  if (balloon.x + balloon.dx > 0 && balloon.x + balloon.dx < canvas.width){
+    balloon.x += balloon.dx;
+  }
   balloon.y += Math.sin(timer / 20);
   balloon.draw();
 
