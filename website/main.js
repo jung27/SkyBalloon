@@ -120,7 +120,7 @@ function update() {
       } else {
         v[1]++;
       }
-    if (timer % 35 === 0 && cool.get("follow")[2] !== 100) {
+    if (timer % 50 === 0 && cool.get("follow")[2] !== 100) {
       cool.get("follow")[2]--;
     }
   });
