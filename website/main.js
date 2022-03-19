@@ -119,9 +119,9 @@ class Thunder {
       ctx.drawImage(img4, this.x, this.y, this.width * 4, this.height * 4);
     } else if (this.type < 90 && this.type%2 === 1){
       ctx.drawImage(img5, this.x, this.y, this.width * 4, this.height * 4);
-    } else if (this.type < 190){
+    } else if (this.type < 130){
       ctx.globalAlpha = 1.0;
-      ctx.globalAlpha = 1-(this.type-90)*0.01;
+      ctx.globalAlpha = 1-(this.type-90)*0.025;
       ctx.drawImage(img6, this.x, this.y, this.width * 4, this.height * 4);
       ctx.globalAlpha = 1.0;
     }
@@ -171,7 +171,7 @@ function update() {
 
   pjs.forEach((v) => {
     v.forEach((a, i, o) => {
-      if (a.y < -50 || a.type === 190) {
+      if (a.y < -50 || a.type === 130) {
         o.splice(i, 1);
       }
     });
@@ -197,6 +197,12 @@ function update() {
     score++;
   }
 
+  pjs.get("thunder").forEach((a) => {
+    a.draw();
+    console.log(1-(a.type-90)*0.01);
+    a.type += 1;
+  });
+  
   if (
     balloon.x + balloon.dx > balloon.radius &&
     balloon.x + balloon.dx < canvas.width - balloon.radius
@@ -212,12 +218,6 @@ function update() {
   pjs.get("arrow").forEach((a) => {
     a.y -= 10;
     a.draw();
-  });
-  
-  pjs.get("thunder").forEach((a) => {
-    a.draw();
-    console.log(1-(a.type-90)*0.01);
-    a.type += 1;
   });
 
   pjs.get("wind").forEach((a) => {
@@ -267,7 +267,7 @@ function update() {
 
   pjs.forEach((v, k) => {
     v.forEach((a) => {
-      if ((distance(balloon, a) < balloon.radius && k != "wind") || (k == "thunder" && (balloon.x > a.x && balloon.x < a.x + a.width * 4))) {
+      if ((distance(balloon, a) < balloon.radius && k != "wind") || (v.type > 90 && (balloon.x > a.x && balloon.x < a.x + a.width * 4))) {
         cancelAnimationFrame(animation);
         if (score > hscore) {
           hscore = score;
