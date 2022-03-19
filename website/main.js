@@ -215,14 +215,10 @@ function update() {
     a.draw();
   });
   
-  ctx.globalAlpha = 1.0;
   pjs.get("thunder").forEach((a) => {
-    a.type += 1;
-    ctx.globalAlpha = 1.0;
     a.draw();
-    ctx.globalAlpha = 1.0;
+    a.type += 1;
   });
-  ctx.globalAlpha = 1.0;
 
   pjs.get("wind").forEach((a) => {
     if (a.dir) {
