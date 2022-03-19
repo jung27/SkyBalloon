@@ -122,7 +122,6 @@ class Thunder {
       ctx.globalAlpha = 1-(this.type-90)*0.025;
       ctx.drawImage(img6, this.x, this.y, this.width * 4, this.height * 4);
     }
-    ctx.globalAlpha = 1;
   }
 }
 
@@ -214,6 +213,7 @@ function update() {
   pjs.get("thunder").forEach((a) => {
     a.type += 1;
     a.draw();
+    ctx.globalAlpha = 1;
   });
 
   pjs.get("wind").forEach((a) => {
