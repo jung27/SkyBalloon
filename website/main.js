@@ -109,8 +109,8 @@ class Thunder {
   constructor() {
     this.x = Math.floor(Math.random() * canvas.width);
     this.y = 0;
-    this.width = 256;
-    this.height = 32;
+    this.width = 32;
+    this.height = 256;
     this.type = 0;
   }
   draw() {
