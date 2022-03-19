@@ -121,8 +121,8 @@ class Thunder {
     } else{
       ctx.globalAlpha = 1-(this.type-90)*0.025;
       ctx.drawImage(img6, this.x, this.y, this.width * 4, this.height * 4);
-      ctx.globalAlpha = 1;
     }
+    ctx.globalAlpha = 1;
   }
 }
 
