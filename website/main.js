@@ -144,10 +144,10 @@ function update() {
     });
   });
 
-  if (ispressA && balloon.x - 3 > balloon.radius) {
+  if (ispressA) {
     balloon.dx -= 3;
   }
-  if (ispressD && balloon.x + 3 < canvas.width - balloon.radius) {
+  if (ispressD) {
     balloon.dx += 3;
   }
   pjs.get("wind").forEach((a) => {
@@ -164,7 +164,7 @@ function update() {
     score++;
   }
    
-  if (balloon.x + balloon.dx > 0 && balloon.x + balloon.dx < canvas.width){
+  if (balloon.x + balloon.dx > balloon.radius && balloon.x + balloon.dx < canvas.width - balloon.radius){
     balloon.x += balloon.dx;
   }
   balloon.y += Math.sin(timer / 20);
