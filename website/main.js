@@ -199,7 +199,6 @@ function update() {
 
   pjs.get("thunder").forEach((a) => {
     a.draw();
-    console.log(1-(a.type-90)*0.01);
     a.type += 1;
   });
   
@@ -267,7 +266,7 @@ function update() {
 
   pjs.forEach((v, k) => {
     v.forEach((a) => {
-      if ((distance(balloon, a) < balloon.radius && k != "wind") || (v.type > 90 && (balloon.x > a.x && balloon.x < a.x + a.width * 4))) {
+      if ((distance(balloon, a) < balloon.radius && k != "wind") || (a.type > 90 && (balloon.x > a.x && balloon.x < a.x + a.width * 4))) {
         cancelAnimationFrame(animation);
         if (score > hscore) {
           hscore = score;
