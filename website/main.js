@@ -98,6 +98,33 @@ class Wind {
   }
 }
 
+const img4 = new Image();
+img4.src = "caution1.png";
+const img5 = new Image();
+img5.src = "caution2.png";
+const img6 = new Image();
+img6.src = "thunder.png";
+
+class Thunder {
+  constructor() {
+    this.x = Math.floor(Math.random() * canvas.width);
+    this.y = 0;
+    this.width = 256;
+    this.height = 32;
+    this.type = 0;
+  }
+  draw() {
+    if (this.type < 90 && this.type%2 === 0){
+      ctx.drawImage(img4, this.x, this.y, this.width * 4, this.height * 4);
+    } else if (this.type < 90 && this.type%2 === 1){
+      ctx.drawImage(img5, this.x, this.y, this.width * 4, this.height * 4);
+    } else{
+      ctx.globalAlpha = 1-(this.type-90)*0.025
+      ctx.drawImage(img6, this.x, this.y, this.width * 4, this.height * 4);
+    }
+  }
+}
+
 let timer = 0;
 let ispressA = false;
 let ispressD = false;
@@ -105,10 +132,12 @@ let pjs = new Map();
 pjs.set("arrow", []);
 pjs.set("follow", []);
 pjs.set("wind", []);
+pjs.set("thunder", []);
 let cool = new Map();
 cool.set("arrow", [0, 0, 100, Arrow]);
 cool.set("follow", [2000, 0, 500, Follow]);
 cool.set("wind", [0, 0, 1400, Wind]);
+cool.set("thunder", [0, 0, 700, Thunder]);
 let animation;
 let score = 0;
 let over = false;
@@ -138,7 +167,7 @@ function update() {
 
   pjs.forEach((v) => {
     v.forEach((a, i, o) => {
-      if (a.y < -50) {
+      if (a.y < -50 || a.type === 130) {
         o.splice(i, 1);
       }
     });
@@ -178,6 +207,11 @@ function update() {
 
   pjs.get("arrow").forEach((a) => {
     a.y -= 10;
+    a.draw();
+  });
+  
+  pjs.get("thunder").forEach((a) => {
+    a.type += 1;
     a.draw();
   });
 
@@ -228,7 +262,7 @@ function update() {
 
   pjs.forEach((v, k) => {
     v.forEach((a) => {
-      if (distance(balloon, a) < balloon.radius && k != "wind") {
+      if ((distance(balloon, a) < balloon.radius && k != "wind") || (k == "thunder" && (balloon.x > a.x && balloon.x < a.x + a.width * 4))) {
         cancelAnimationFrame(animation);
         if (score > hscore) {
           hscore = score;
@@ -253,6 +287,7 @@ function update() {
         cool.set("arrow", [0, 0, 100, Arrow]);
         cool.set("follow", [2100, 0, 500, Follow]);
         cool.set("wind", [0, 0, 1400, Wind]);
+        cool.set("thunder", [0, 0, 700, Thunder]);
         pjs.forEach((v) => {
           v.length = 0;
         });
