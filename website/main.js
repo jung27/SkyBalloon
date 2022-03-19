@@ -122,6 +122,7 @@ class Thunder {
     } else if (this < 190){
       ctx.globalAlpha = 1.0;
       ctx.globalAlpha = 1-(this.type-90)*0.01;
+      console.log(1-(this.type-90)*0.01;);
       ctx.drawImage(img5, this.x, this.y, this.width * 4, this.height * 4);
       ctx.globalAlpha = 1.0;
     }
