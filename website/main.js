@@ -83,13 +83,13 @@ class Wind {
   constructor() {
     this.x = canvas.width;
     this.y = 0;
-    this.width = 256;
+    this.width = 384;
     this.height = 128;
     const r = Math.random();
     this.dir = true;
-    if (r > 0.5){
-      this.x = -this.width*5;
-    } else{
+    if (r > 0.5) {
+      this.x = -this.width * 5;
+    } else {
       this.dir = false;
     }
   }
@@ -152,9 +152,9 @@ function update() {
   }
   pjs.get("wind").forEach((a) => {
     if (balloon.x > a.x && balloon.x < a.x + a.width * 5) {
-      if(a.dir){
+      if (a.dir) {
         balloon.dx += 2;
-      } else{
+      } else {
         balloon.dx -= 2;
       }
     }
@@ -163,8 +163,11 @@ function update() {
   if (timer % 7 === 0) {
     score++;
   }
-   
-  if (balloon.x + balloon.dx > balloon.radius && balloon.x + balloon.dx < canvas.width - balloon.radius){
+
+  if (
+    balloon.x + balloon.dx > balloon.radius &&
+    balloon.x + balloon.dx < canvas.width - balloon.radius
+  ) {
     balloon.x += balloon.dx;
   }
   balloon.y += Math.sin(timer / 20);
@@ -179,9 +182,9 @@ function update() {
   });
 
   pjs.get("wind").forEach((a) => {
-    if(a.dir){
+    if (a.dir) {
       a.x += 5;
-    } else{
+    } else {
       a.x -= 5;
     }
     a.draw();
