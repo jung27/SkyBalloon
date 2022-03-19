@@ -119,10 +119,10 @@ class Thunder {
       ctx.drawImage(img4, this.x, this.y, this.width * 4, this.height * 4);
     } else if (this.type < 90 && this.type%2 === 1){
       ctx.drawImage(img5, this.x, this.y, this.width * 4, this.height * 4);
-    } else{
+    } else if (this < 130){
       ctx.globalAlpha = 1.0;
-      ctx.drawImage(img6, this.x, this.y, this.width * 4, this.height * 4);
       ctx.globalAlpha = 1-(this.type-90)*0.025;
+      ctx.drawImage(img6, this.x, this.y, this.width * 4, this.height * 4);
       ctx.globalAlpha = 1.0;
     }
     ctx.globalAlpha = 1.0;
