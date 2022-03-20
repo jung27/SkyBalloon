@@ -107,7 +107,7 @@ img6.src = "thunder.png";
 
 class Thunder {
   constructor() {
-    this.x = balloon.x
+    this.x = balloon.x;
     this.y = 0;
     this.width = 32;
     this.height = 256;
@@ -115,13 +115,13 @@ class Thunder {
   }
   draw() {
     ctx.globalAlpha = 1.0;
-    if (this.type < 90 && this.type%2 === 0){
+    if (this.type < 90 && this.type % 2 === 0) {
       ctx.drawImage(img4, this.x, this.y, this.width * 4, this.height * 4);
-    } else if (this.type < 90 && this.type%2 === 1){
+    } else if (this.type < 90 && this.type % 2 === 1) {
       ctx.drawImage(img5, this.x, this.y, this.width * 4, this.height * 4);
-    } else if (this.type < 130){
+    } else if (this.type < 130) {
       ctx.globalAlpha = 1.0;
-      ctx.globalAlpha = 1-(this.type-90)*0.025;
+      ctx.globalAlpha = 1 - (this.type - 90) * 0.025;
       ctx.drawImage(img6, this.x, this.y, this.width * 4, this.height * 4);
       ctx.globalAlpha = 1.0;
     }
@@ -201,7 +201,7 @@ function update() {
     a.draw();
     a.type += 1;
   });
-  
+
   if (
     balloon.x + balloon.dx > balloon.radius &&
     balloon.x + balloon.dx < canvas.width - balloon.radius
@@ -266,7 +266,10 @@ function update() {
 
   pjs.forEach((v, k) => {
     v.forEach((a) => {
-      if ((distance(balloon, a) < balloon.radius && k != "wind") || (a.type > 90 && (balloon.x > a.x && balloon.x < a.x + a.width * 4))) {
+      if (
+        (distance(balloon, a) < balloon.radius && k != "wind") ||
+        (a.type > 90 && balloon.x > a.x && balloon.x < a.x + a.width * 4)
+      ) {
         cancelAnimationFrame(animation);
         if (score > hscore) {
           hscore = score;
@@ -353,6 +356,11 @@ document.addEventListener("touchstart", (e) => {
     update();
     over = false;
   }
+});
+
+window.addEventListener("resize", () => {
+  canvas.height = window.innerHeight - 20;
+  canvas.width = window.innerWidth - 20;
 });
 
 function checkMobileDevice() {
